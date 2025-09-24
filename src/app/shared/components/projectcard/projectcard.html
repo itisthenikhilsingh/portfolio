@@ -1,0 +1,25 @@
+<!-- app-projectcard.component.html -->
+<article class="relative flex flex-col h-full w-full rounded-xl bg-white text-gray-700 shadow-md overflow-hidden">
+  <!-- image area: full width, fixed height, image covers -->
+  <div class=" h-2/6 overflow-hidden rounded-t-xl bg-gradient-to-r from-blue-500 to-blue-600">
+    <img *ngIf="reff" [src]="reff" [alt]="title" class="w-full h-full object-cover">
+  </div>
+
+  <div class="p-6 flex-1 flex flex-col">
+    <h5 class="mb-2 text-xl font-semibold text-blue-gray-900">
+      {{ title }}
+    </h5>
+
+    <p class="text-base font-light leading-relaxed text-inherit flex-1 overflow-hidden">
+      {{ details }}
+    </p>
+
+    <div class="mt-4">
+      <a *ngIf="link" [href]="link" target="_blank" rel="noopener noreferrer">
+        <button type="button" class="select-none rounded-lg bg-slate-700 py-3 px-6 text-xs font-bold uppercase text-white shadow-md transition-all hover:shadow-lg">
+          View
+        </button>
+      </a>
+    </div>
+  </div>
+</article>

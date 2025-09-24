@@ -1,1 +1,63 @@
+@import "tailwindcss";
 /* You can add global styles to this file, and also import other style files */
+:root {
+  /* Backgrounds */
+  --color-bg-primary: #0d0025;
+  --color-bg-secondary: #2a1f4d;
+  --color-bg-card: #24163a;
+
+  /* Text */
+  --color-text-main: #f3f4f6;
+  --color-text-muted: #9ca3af;
+
+  /* Accents */
+  --color-accent-1: #facc15; /* yellow */
+  --color-accent-2: #38bdf8; /* cyan */
+
+  /* States */
+  --color-success: #22c55e;
+  --color-error: #ef4444;
+
+  /* Effects */
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.25);
+  --shadow-lg: 0 6px 20px rgba(0, 0, 0, 0.35);
+}
+
+/* Global resets */
+body {
+  
+  font-family: 'Inter', sans-serif;
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-main);
+  
+}
+
+
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+main::-webkit-scrollbar {
+  display: none;
+}
+
+main {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+
+main {
+  will-change: transform;
+  -webkit-overflow-scrolling: touch;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+
+html {
+  scroll-behavior: smooth;
+}
