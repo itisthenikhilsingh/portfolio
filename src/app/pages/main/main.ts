@@ -6,8 +6,8 @@ import { About } from '../about/about';
 @Component({
   selector: 'app-main',
   templateUrl: './main.html',
-  imports:[Navbar,About,RouterOutlet],
-  styleUrls: ['./main.css']
+  imports: [Navbar, About, RouterOutlet],
+  styleUrls: ['./main.css'],
 })
 export class Main implements OnInit {
   heading: string = '';
@@ -16,16 +16,16 @@ export class Main implements OnInit {
   private headingsMap: { [key: string]: string } = {
     '/': 'About me',
     '/resume': 'Resume',
-    '/about': 'About',
+    '/about': 'About me',
     '/experience': 'Experience',
     '/projects': 'Projects',
-    '/contact': 'Contact'
+    '/contact': 'Contact',
   };
 
   constructor(private router: Router) {}
 
   ngOnInit() {
-    this.router.events.subscribe(event => {
+    this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         this.heading = this.headingsMap[event.urlAfterRedirects] || '';
       }
