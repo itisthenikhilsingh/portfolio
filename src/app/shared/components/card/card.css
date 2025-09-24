@@ -1,124 +1,94 @@
-/* Compact glow card — clipped rotating glow that follows border-radius */
 :root {
   --card-radius: 12px;
-  --glow-thickness: 3px;   /* change to make glow thinner/thicker */
-  --glow-blur: 18px;       /* blur amount for softer glow */
-  --min-h-mobile: 160px;
-  --min-h-desktop: 190px;
+  --card-min-h-mobile: 180px;
+  --card-min-h-desktop: 200px;
 }
 
 .card {
   --r: var(--card-radius);
-  width: 100%;
-  max-width: 320px;
-  min-height: var(--min-h-mobile);
-  background: #171717;
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;             /* VERY important — clips pseudo elements */
-  border-radius: var(--r);      /* rounded corners */
-  box-shadow: 0 0 3px 1px #00000088;
+  width: 100%;
+  min-height: var(--card-min-h-mobile);
+  background: #111111; /* Slightly darker for depth */
+  border-radius: var(--r);
+  overflow: hidden;
   cursor: pointer;
-  margin: auto;
-  transition: transform .28s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  isolation: isolate; /* Ensures z-index stacking works correctly */
 }
 
 .card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-6px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
 }
 
-/* main content sits above glow */
+/* === GLOW LAYER (behind content, clipped to card shape) === */
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 150%;
+  height: 150%;
+  border-radius: var(--r);
+  background: conic-gradient(from 0deg, #ff2288, #387ef0, #22ff88, #ff2288);
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.3s ease;
+  /* This creates a soft outer glow without overflow */
+  filter: blur(24px);
+  transform: scale(1.08); /* Slightly larger to wrap around edges */
+}
+
+.card:hover::before {
+  opacity: 0.5;
+  animation: rotateGlow 12s linear infinite;
+}
+
+/* === CONTENT LAYER (on top, with subtle inner padding) === */
 .card .content {
-  z-index: 3;
   position: relative;
-  width: 95%;
-  height: auto;
-  padding: 0.75rem;
-  border-radius: calc(var(--r) - 2px); /* slightly inset radius */
-  background: #171717;
-  color: #fff;
+  z-index: 2;
+  width: 90%;
+  padding: 1.25rem 1rem;
+  text-align: center;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  text-align: center;
-  font-size: 0.95rem;
+  align-items: center;
+  gap: 0.5rem;
+  color: white;
 }
 
-/* small decorative bar inside content (keeps same radius) */
-.content::before {
-  content: "";
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 4px;
-  height: 28px;
-  border-radius: 4px;
-  background: rgba(255,255,255,0.06);
-  filter: blur(6px);
-  z-index: 4;
-  opacity: 0;                /* you can enable on hover if wanted */
-  transition: opacity .2s ease;
-}
-
-/* rotating gradient glow (bigger than card so rotation looks smooth)
-   but clipped to the card’s rounded rect via clip-path */
-.card::before {
-  content: "";
-  position: absolute;
-  inset: -30%;                 /* intentionally large so rotation has area */
-  z-index: 1;
-  pointer-events: none;
-  border-radius: calc(var(--r) + 20px); 
-  /* slightly bigger so gradient edge is soft */
-
-  background: linear-gradient(90deg, rgba(255,34,136,0.85), rgba(56,126,240,0.85), rgba(34,255,136,0.65));
-  filter: blur(200px);
-  opacity: 0;                  /* visible only on hover */
-  transform-origin: 50% 50%;
-  transition: opacity .28s ease;
-  /* CLIP to rounded rect so glow cannot escape */
-  clip-path: inset(0 round var(--r));
-}
-
-/* thin inner overlay that creates the "neon border" effect:
-   inset the overlay so content stays readable and glow becomes border-like */
+/* === INNER DARK OVERLAY (optional: for depth) === */
 .card::after {
-  content: "";
+  content: '';
   position: absolute;
-  inset: calc(var(--glow-thickness) * 0.5); /* make inner dark inset relative to glow */
-  z-index: 2;
-  pointer-events: none;
-  border-radius: calc(var(--r) - calc(var(--glow-thickness) * 0.5));
-  background: rgba(23, 23, 23, 0.80); /* darken inner area so glow looks like outline */
-  backdrop-filter: blur(6px); /* subtle */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(17, 17, 17, 0.9);
+  border-radius: var(--r);
+  z-index: 1;
+  /* Optional: very subtle noise or gradient for texture */
+  /* background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.02'/%3E%3C/svg%3E"); */
 }
 
-/* play the rotation on hover and increase opacity */
-.card:hover::before {
-  opacity: 1;
-  animation: rotation 8s linear infinite;
+/* === ANIMATION === */
+@keyframes rotateGlow {
+  from {
+    transform: scale(1.08) rotate(0deg);
+  }
+  to {
+    transform: scale(1.08) rotate(360deg);
+  }
 }
 
-/* rotation animation */
-@keyframes rotation {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-}
-
-/* Grid for multiple cards */
-.cards-container {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  justify-items: center;
-}
-
-/* Make card slightly taller on desktop */
+/* === RESPONSIVE HEIGHT === */
 @media (min-width: 768px) {
   .card {
-    min-height: var(--min-h-desktop);
+    min-height: var(--card-min-h-desktop);
   }
 }

@@ -1,17 +1,22 @@
 <div class="grid h-screen bg-[#040D12] text-[#93B1A6] md:grid-cols-[20rem_1fr] gap-4 p-4">
   <!-- Fixed Sidebar -->
-  <aside class="bg-[#222222] border border-[#5C8374] rounded-2xl shadow-lg p-6 overflow-hidden hidden md:block">
+  <aside
+    class="bg-[#222222] border border-[#5C8374] rounded-2xl shadow-lg p-6 overflow-hidden hidden md:block"
+  >
     <app-about></app-about>
   </aside>
 
   <!-- Scrollable Right Section -->
-  <div class="flex flex-col bg-[#222222] border border-[#5C8374] rounded-2xl shadow-lg overflow-hidden">
+  <div
+    class="flex flex-col bg-[#222222] border border-[#5C8374] rounded-2xl shadow-lg overflow-hidden"
+  >
     <!-- Fixed Header -->
     <div class="grid grid-cols-7 items-center flex-shrink-0">
       <div class="col-span-2 px-6">
         <h1 class="text-4xl font-bold mt-4">{{ heading }}</h1>
       </div>
-      <div class="col-span-5">
+      <!-- 👇 HIDE NAVBAR ON MOBILE -->
+      <div class="col-span-5 hidden md:block">
         <app-navbar></app-navbar>
       </div>
     </div>
